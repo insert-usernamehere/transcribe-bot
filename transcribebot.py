@@ -20,7 +20,7 @@ async def transcribe(inter: disnake.ApplicationCommandInteraction, message: disn
     convertemessage = sr.AudioFile("audio.wav")
     with convertemessage as sounds:
         transcribeaudo = st.record(sounds)
-    await inter.response.send_message(st.recognize_sphinx(transcribeaudo), file=disnake.File("audio.mp3"))
+    await inter.response.send_message(st.recognize_sphinx(transcribeaudo), file=disnake.File("audio.wav"))
     os.remove("audio.ogg")
     os.remove("audio.wav")
 
