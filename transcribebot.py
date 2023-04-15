@@ -12,7 +12,7 @@ bot = commands.Bot(command_prefix='.')
 
 @bot.message_command(name="Transcrible")
 async def transcribe(inter: disnake.ApplicationCommandInteraction, message: disnake.Message):
-    await inter.response.defer()
+    await inter.response.defer(ephemeral='true')
     # Reversing the message and sending it back.
     await message.attachments[0].save("audio.ogg")
     mp3file = AudioSegment.from_ogg("audio.ogg")
@@ -20,7 +20,7 @@ async def transcribe(inter: disnake.ApplicationCommandInteraction, message: disn
     convertemessage = sr.AudioFile("audio.wav")
     with convertemessage as sounds:
         transcribeaudo = st.record(sounds)
-    await inter.response.send_message(st.recognize_sphinx(transcribeaudo), file=disnake.File("audio.wav"))
+    await inter.edit_original_message(st.recognize_sphinx(transcribeaudo), file=disnake.File("audio.wav"))
     os.remove("audio.ogg")
     os.remove("audio.wav")
 
