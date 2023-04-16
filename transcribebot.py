@@ -12,7 +12,7 @@ bot = commands.Bot(command_prefix='.')
 
 def prepaudio(audiofile):
     oggfile = AudioSegment.from_ogg(audiofile)
-    oggfile.export(audiofile, format="wav")
+    oggfile.export("audio.wav", format="wav")
     convertemessage = sr.AudioFile("audio.wav")
     with convertemessage as sounds:
         transcribeaudo = st.record(sounds)
