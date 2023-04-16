@@ -38,7 +38,7 @@ async def transcribesphinx(inter: disnake.ApplicationCommandInteraction, message
         await message.attachments[0].save("audio.ogg")
         # WARNING Google is propritary, consider disabling however sphynix is currently not very good so this provides an option
         embed=disnake.Embed(title=st.recognize_google(prepaudio("audio.ogg")), color=0x3584e4)
-        embed.set_author(name=message.author.nick, url=message.jump_url, icon_url=message.author.display_avatar)
+        embed.set_author(name=message.author.display_name, url=message.jump_url, icon_url=message.author.display_avatar)
         await inter.edit_original_message(embed=embed, components=[disnake.ui.Button(label="See more posibilites", style=disnake.ButtonStyle.success, custom_id="gp")])
         os.remove("audio.ogg")
         os.remove("audio.wav")
