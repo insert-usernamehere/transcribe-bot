@@ -3,6 +3,7 @@ from disnake.ext import commands
 from dotenv import load_dotenv
 import os
 from os import path
+import asyncio
 from pydub import AudioSegment
 import speech_recognition as sr
 
@@ -40,20 +41,22 @@ async def transcribesphinx(inter: disnake.ApplicationCommandInteraction, message
         embed=disnake.Embed(title=st.recognize_google(prepaudio("audio.ogg")), color=0x3584e4)
         embed.set_author(name=message.author.display_name, url=message.jump_url, icon_url=message.author.display_avatar)
         await inter.edit_original_message(embed=embed, components=[disnake.ui.Button(label="See more posibilites", style=disnake.ButtonStyle.success, custom_id="gp")])
+        await asyncio.sleep(3)
         os.remove("audio.ogg")
         os.remove("audio.wav")
     except Exception as e:
         await inter.edit_original_message(content=f'an error appears to have occoured please report it to the developer: {e}')
 
 @bot.listen("on_button_click")
-async def extratranscribe(inter: disnake.MessageInteraction, message: disnake.Message):
+async def extratranscribe(inter: disnake.MessageInteraction):
     if inter.component.custom_id == "gp":
-        await inter.response.defer(ephemeral='true')
-        await message.attachments[0].save("audio.ogg")
-        embed=disnake.Embed(title=st.recognize_google(prepaudio("audio.ogg"), show_all=True), color=0x3584e4)
-        embed.set_author(name=message.author.nick, url=message.jump_url, icon_url=message.author.display_avatar)
-        await inter.edit_original_message(embed=embed)
-        os.remove("audio.ogg")
-        os.remove("audio.wav")
+        try:
+            await inter.response.defer(ephemeral='true')
+            await inter.attachments[0].save("audio.ogg")
+            embed=disnake.Embed(title=st.recognize_google(prepaudio("audio.ogg"), show_all=True), color=0x3584e4)
+            embed.set_author(name=inter.author.nick, url=inter.jump_url, icon_url=inter.author.display_avatar)
+            await inter.edit_original_message(embed=embed)
+        except Exception as e:
+            await inter.edit_original_message(content=f'The interaction has expiredS')
 
 bot.run(os.getenv("TOKEN"))
