@@ -18,7 +18,7 @@ def prepaudio(audiofile):
         transcribeaudo = st.record(sounds)
     return transcribeaudo
 
-@bot.message_command(name="Transcrible Using Sphinx")
+@bot.message_command(name="Transcribe Using Sphinx")
 async def transcribesphinx(inter: disnake.ApplicationCommandInteraction, message: disnake.Message):
     try:
         await inter.response.defer(ephemeral='true')
@@ -29,13 +29,15 @@ async def transcribesphinx(inter: disnake.ApplicationCommandInteraction, message
     except Exception as e:
         await inter.edit_original_message(content=f'an error appears to have occoured please report it to the developer: {e}')
 
-@bot.message_command(name="Transcrible Using Google")
+@bot.message_command(name="Transcribe Using Google")
 async def transcribesphinx(inter: disnake.ApplicationCommandInteraction, message: disnake.Message):
     try:
         await inter.response.defer(ephemeral='true')
         await message.attachments[0].save("audio.ogg")
         # WARNING Google is propritary, consider disabling however sphynix is currently not very good so this provides an option
-        await inter.edit_original_message(content=st.recognize_google(prepaudio("audio.ogg")))
+        embed=disnake.Embed(title=st.recognize_google(prepaudio("audio.ogg")), color=0x3584e4)
+        embed.set_author(name=message.author.display_name, url=message.jump_url, icon_url=message.author.display_avatar)
+        await inter.edit_original_message(embed=embed)
         os.remove("audio.ogg")
         os.remove("audio.wav")
     except Exception as e:
