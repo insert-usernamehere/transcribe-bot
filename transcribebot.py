@@ -52,7 +52,7 @@ async def transcribesphinx(inter: disnake.ApplicationCommandInteraction, message
         await inter.edit_original_message(content=f'an error appears to have occoured please report it to the developer: {e}')
 
 @bot.message_command(name="Transcribe Using DeepSpeech")
-async def transcribesphinx(inter: disnake.ApplicationCommandInteraction, message: disnake.Message):
+async def transcribedeepspeech(inter: disnake.ApplicationCommandInteraction, message: disnake.Message):
     try:
         await inter.response.defer(ephemeral='true')
         await message.attachments[0].save("audio.ogg")
